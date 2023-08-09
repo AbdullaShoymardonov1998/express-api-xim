@@ -18,4 +18,10 @@ router.put("/:id", fileHandler.single("file"), fileController.updateFileById);
 
 router.delete("/:id", fileController.deleteFileById);
 
+router.get(
+  "/download/:id",
+  fileHandler.single("file"),
+  fileController.downloadFileById
+);
+
 module.exports = router;

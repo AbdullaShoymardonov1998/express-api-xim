@@ -32,6 +32,12 @@ exports.signup = async (req, res) => {
   });
 };
 
+exports.getUserId = async (req, res) => {
+  res.status(200).json({
+    userId: res.locals.id,
+  });
+};
+
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -98,64 +104,3 @@ exports.signInToken = async (req, res) => {
     });
   } catch (error) {}
 };
-
-// exports.getUser = async (req, res, next) => {
-//   try {
-//     const user = await User.findByPk(req.params.id);
-
-//     if (!user) {
-//       throw new Error("User not found");
-//     }
-
-//     res.status(200).json(user);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// exports.updateUser = async (req, res, next) => {
-//   try {
-//     let user = await User.findByPk(req.body.id);
-
-//     if (!user) {
-//       throw new Error("User not found");
-//     }
-
-//     for (key in req.body) {
-//       user[key] = req.body[key];
-//     }
-
-//     if (user.password) {
-//       user.password = await bcrypt.hash(user.password, 12);
-//     }
-
-//     const updatedUser = await user.save();
-
-//     res.status(200).json(updatedUser);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// exports.checktoken = async (req, res, next) => {
-//   try {
-//     const token = req.get("Authorization");
-//     let adminToken;
-
-//     if (!token) {
-//       return res.status(400).json({ error: "Not Authenticated" });
-//     }
-
-//     adminToken = jwt.verify(token, SECRET);
-//     if (!adminToken) {
-//       return res.status(400).json({ error: "Not Authenticated" });
-//     }
-
-//     res.status(200).json({ valid: true });
-//   } catch (err) {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }
-// };

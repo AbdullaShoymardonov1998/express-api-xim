@@ -8,8 +8,6 @@ router.post("/signup", userController.signup);
 router.post("/signin", userController.signin);
 
 router.post("/signin/new_token", auth.isAuth, userController.signInToken);
-// router.get("/:id", userController.getUser);
-// router.put("/update", auth.isAuth, userController.updateUser);
-// router.post("/checktoken", auth.isAuth, userController.checktoken);
+router.get("/info", auth.isAuth, userController.getUserId);
 
 module.exports = router;

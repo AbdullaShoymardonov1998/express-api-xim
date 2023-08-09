@@ -2,15 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const File = sequelize.define("File", {
-  // filename: {
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  // },
-  // filepath: {
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  // },
-
   originalname: {
     type: DataTypes.STRING,
   },
@@ -22,6 +13,9 @@ const File = sequelize.define("File", {
   },
   extension: {
     type: DataTypes.STRING,
+  },
+  size: {
+    type: DataTypes.INTEGER,
   },
 });
 

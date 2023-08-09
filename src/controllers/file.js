@@ -4,7 +4,7 @@ const File = require("../models/file.model");
 const { PAGE_LIMIT } = require("../keys/keys");
 exports.createFileUpload = async (req, res, next) => {
   try {
-    const { originalname, mimetype, filename } = req.file;
+    const { originalname, mimetype, filename, size } = req.file;
     const extensions = req.file.originalname.split(".");
     const extension = extensions[extensions.length - 1];
     const createFileInfo = await File.create({
@@ -12,6 +12,7 @@ exports.createFileUpload = async (req, res, next) => {
       mimetype,
       filename,
       extension,
+      size,
     });
 
     res.status(200).json(createFileInfo);
@@ -89,7 +90,7 @@ exports.deleteFileById = async (req, res) => {
 };
 
 exports.updateFileById = async (req, res) => {
-  const { id, originalname, mimetype, filename, extension } = req.file;
+  const { originalname, mimetype, filename, extension, size } = req.file;
   const fileToUpdate = await File.findOne({
     where: {
       id: req.params.id,
@@ -105,6 +106,7 @@ exports.updateFileById = async (req, res) => {
       mimetype,
       filename,
       extension,
+      size,
     });
     await fileToUpdate.save();
     const filePath = path.join("uploads", fileToUpdate.filename);
@@ -114,4 +116,21 @@ exports.updateFileById = async (req, res) => {
     message: "Updated",
     fileToUpdate,
   });
+};
+
+exports.downloadFileById = async (req, res) => {
+  const fileToDownload = await File.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (!fileToDownload) {
+    return res.status(404).json({
+      message: "Id not found",
+    });
+  }
+
+  const filePath = path.join("uploads", fileToDownload.filename);
+  console.log(filePath);
+  res.download(filePath, fileToDownload.filename);
 };
