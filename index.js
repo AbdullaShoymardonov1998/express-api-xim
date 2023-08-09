@@ -6,10 +6,11 @@ const users = require("./src/routes/user");
 const files = require("./src/routes/file");
 
 app.use(express.json());
+app.use(cors());
 
-// User create
 app.use(users);
 app.use("/file", files);
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

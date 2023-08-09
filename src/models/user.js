@@ -16,6 +16,12 @@ const User = sequelize.define("users", {
       notEmpty: true,
     },
   },
+  accessToken: {
+    type: DataTypes.STRING,
+  },
+  refreshToken: {
+    type: DataTypes.STRING,
+  },
 });
 
 module.exports = User;

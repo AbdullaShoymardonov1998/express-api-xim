@@ -129,8 +129,6 @@ exports.downloadFileById = async (req, res) => {
       message: "Id not found",
     });
   }
-
   const filePath = path.join("uploads", fileToDownload.filename);
-  console.log(filePath);
   res.download(filePath, fileToDownload.filename);
 };

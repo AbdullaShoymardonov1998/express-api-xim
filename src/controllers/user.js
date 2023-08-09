@@ -18,16 +18,21 @@ exports.signup = async (req, res) => {
       id: user.id,
     },
     SECRET,
-    { expiresIn: "365d" }
+    { expiresIn: "10m" }
   );
 
   const refreshToken = await jwt.sign({ id: user.id }, SECRET, {
-    expiresIn: "2d",
+    expiresIn: "20m",
+  });
+
+  await user.update({
+    email,
+    password,
+    accessToken: token,
+    refreshToken,
   });
 
   res.status(200).json({
-    accessToken: token,
-    refreshToken,
     user: user,
   });
 };
@@ -35,6 +40,25 @@ exports.signup = async (req, res) => {
 exports.getUserId = async (req, res) => {
   res.status(200).json({
     userId: res.locals.id,
+  });
+};
+
+exports.logout = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      id: res.locals.id,
+    },
+  });
+
+  const updatedAccessToken = (user.accessToken = "");
+  const updatedRefreshToken = (user.refreshToken = "");
+  await user.update({
+    accessToken: updatedAccessToken,
+    refreshToken: updatedRefreshToken,
+  });
+
+  res.status(200).json({
+    message: "successfully logout",
   });
 };
 
@@ -55,11 +79,18 @@ exports.signin = async (req, res) => {
     }
 
     const accessToken = await jwt.sign({ id: user.id }, SECRET, {
-      expiresIn: "1d",
+      expiresIn: "10m",
     });
 
     const refreshToken = await jwt.sign({ id: user.id }, SECRET, {
-      expiresIn: "2d",
+      expiresIn: "20m",
+    });
+
+    await user.update({
+      email,
+      password,
+      accessToken,
+      refreshToken,
     });
 
     return res.json({
@@ -92,11 +123,11 @@ exports.signInToken = async (req, res) => {
     }
 
     const accessToken = await jwt.sign({ id: user.id }, SECRET, {
-      expiresIn: "1d",
+      expiresIn: "10m",
     });
 
     const refreshToken = await jwt.sign({ id: user.id }, SECRET, {
-      expiresIn: "2d",
+      expiresIn: "10m",
     });
     return res.json({
       accessToken,

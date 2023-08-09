@@ -10,17 +10,23 @@ router.post(
   fileHandler.single("file"),
   fileController.createFileUpload
 );
-router.get("/list", fileController.getUploadedFile);
+router.get("/list", auth.isAuth, fileController.getUploadedFile);
 
-router.get("/:id", fileController.getUploadedFileById);
+router.get("/:id", auth.isAuth, fileController.getUploadedFileById);
 
-router.put("/:id", fileHandler.single("file"), fileController.updateFileById);
+router.put(
+  "/:id",
+  auth.isAuth,
+  fileHandler.single("file"),
+  fileController.updateFileById
+);
 
-router.delete("/:id", fileController.deleteFileById);
+router.delete("/:id", auth.isAuth, fileController.deleteFileById);
 
 router.get(
   "/download/:id",
   fileHandler.single("file"),
+  auth.isAuth,
   fileController.downloadFileById
 );
 
